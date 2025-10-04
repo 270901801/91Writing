@@ -12,6 +12,21 @@ https://wzkmyww7j1.feishu.cn/docx/NjJTde6AhoL4jHxB8zxcBG4Gn3b?from=from_copylink
 ## 推荐 大模型 API 聚合平台 91API
 https://api.91hub.vip/
 
+## 平台官网
+https://cz.91hub.vip
+
+## 社群&公众号
+
+<div align="center">
+  <img src="./public/static/qq.png" width="200" alt="QQ群" style="margin: 0 20px;"/>
+  <img src="./public/static/dy.jpg" width="200" alt="公众号" style="margin: 0 20px;"/>
+</div>
+
+<div align="center">
+  <p><strong>QQ交流群</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>关注公众号</strong></p>
+</div>
+
+
 
 ## ✨ 核心特性
 
