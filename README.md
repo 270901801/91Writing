@@ -6,6 +6,13 @@
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)
 
+## 教程文档
+https://wzkmyww7j1.feishu.cn/docx/NjJTde6AhoL4jHxB8zxcBG4Gn3b?from=from_copylink
+
+## 推荐 大模型 API 聚合平台 91API
+https://api.91hub.vip/
+
+
 ## ✨ 核心特性
 
 ### 🧠 智能 AI Agent
@@ -45,20 +52,14 @@
 
 ### ⚙️ 安装步骤
 
-1. **克隆项目**
-   ```bash
-   git clone https://github.com/your-username/jiuyaochuangzuo.git
-   cd jiuyaochuangzuo
-   ```
-
-2. **安装依赖**
+1. **安装依赖**
    ```bash
    pnpm install
    # 或
    npm install
    ```
 
-3. **配置环境变量**
+2. **配置环境变量**
    ```bash
    cp env.example .env
    ```
