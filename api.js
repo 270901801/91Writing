@@ -1,5 +1,6 @@
 import apiConfig from '../config/api.json'
 import billingService from './billing.js'
+import apiProxyDetector from './utils/apiProxy.js' // 引入API代理检测器
 
 class APIService {
   constructor() {
@@ -40,7 +41,34 @@ class APIService {
 
   // 构建请求URL
   buildURL(endpoint) {
-    return `${this.config.baseURL}${endpoint}`
+    // 如果baseURL是外部URL，则需要处理成合适的代理路径
+    if (this.config.baseURL && apiProxyDetector.isExternalUrl(this.config.baseURL)) {
+      try {
+        // 解析baseURL以获取路径部分
+        const baseUrlObj = new URL(this.config.baseURL);
+        // 将完整的请求路径合并
+        const fullPath = baseUrlObj.pathname.endsWith('/') 
+          ? baseUrlObj.pathname + endpoint.replace(/^\/+/,'')
+          : baseUrlObj.pathname + endpoint;
+        
+        // 如果路径以 /v1 开头，使用该路径让Vite代理处理
+        if (fullPath.startsWith('/v1/') || fullPath === '/v1') {
+          return fullPath;
+        } else {
+          // 如果路径不以/v1开头，但包含版本号，返回完整路径
+          return fullPath.startsWith('/') ? fullPath : '/' + fullPath;
+        }
+      } catch (e) {
+        console.error('解析baseURL失败:', this.config.baseURL, e);
+        // 如果解析失败，返回endpoint让代理尝试处理
+        return endpoint;
+      }
+    } else {
+      // 如果baseURL为空或不是外部URL，直接拼接
+      // 确保endpoint以/开头
+      const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : '/' + endpoint;
+      return this.config.baseURL ? `${this.config.baseURL}${normalizedEndpoint}` : normalizedEndpoint;
+    }
   }
 
   // 构建请求头
@@ -53,17 +81,18 @@ class APIService {
 
   // 通用API请求方法
   async makeRequest(endpoint, options = {}) {
-    const url = this.buildURL(endpoint)
-    const headers = this.buildHeaders()
+    const url = this.buildURL(endpoint);
+    const headers = this.buildHeaders();
     
     const requestOptions = {
       method: 'POST',
       headers,
       ...options
-    }
+    };
 
     try {
-      const response = await fetch(url, requestOptions)
+      // 使用代理检测器的fetch方法
+      const response = await apiProxyDetector.fetch(url, requestOptions);
       
       if (!response.ok) {
         const errorData = await response.json()
@@ -177,7 +206,8 @@ class APIService {
     let hasError = false
     
     try {
-      const response = await fetch(url, {
+      // 使用代理检测器的fetch方法
+      const response = await apiProxyDetector.fetch(url, {
         method: 'POST',
         headers,
         body: JSON.stringify(requestBody)
@@ -563,7 +593,8 @@ ${prompt}
       const url = this.buildURL('/models')
       const headers = this.buildHeaders()
       
-      const response = await fetch(url, {
+      // 使用代理检测器的fetch方法
+      const response = await apiProxyDetector.fetch(url, {
         method: 'GET',
         headers
       })
@@ -692,7 +723,8 @@ ${content}
       const url = this.buildURL('/chat/completions')
       const headers = this.buildHeaders()
       
-      const response = await fetch(url, {
+      // 使用代理检测器的fetch方法
+      const response = await apiProxyDetector.fetch(url, {
         method: 'POST',
         headers,
         body: JSON.stringify(requestBody)
